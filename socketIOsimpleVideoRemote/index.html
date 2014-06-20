@@ -1,0 +1,16 @@
+<!DOCTYPE HTML>
+<html lang="ja">
+  <head>
+    <title>Remote Test</title>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+    <script src="http://192.168.11.5:3000/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="videoRemote.js"></script>
+  </head>
+
+  <body>
+    <!-- 二つ画面があることになるので、みせかけの video タグ-->
+    <video  id="webcam-movie" width="0" height="0"></video>
+    <canvas id="webcam-image" width="320" height="240"></canvas>
+    <img    id="others-movie" width="320" height="240" />
+  </body>
+</html>

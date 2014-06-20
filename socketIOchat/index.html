@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>chat test</title>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+    // リモート
+    // var s = io.connect();
+    // ローカル
+    var s = io.connect('http://localhost:3000');
+
+    /*-- サーバーから受け取るイベント --*/
+    s.on("connect", function() {});          // 接続時
+    s.on("disconnect", function(client) {}); // 切断時
+    s.on("S_to_C_message", function(data) {
+      addMessage(data.value);
+    });
+
+    /*-- クライアントからイベント送信 --*/
+    /* イベント名"C_to_S_message"でテキスト枠の内容と一緒にサーバへ送信 */
+    function sendMessage() {
+      var msg = $("#message").val(); // 取得
+      $("#message").val("");         // 空白にする
+      s.emit("C_to_S_message", { value : msg }); // サーバへ送信
+    }
+
+    /*-- ブロードキャスト送信 --*/
+    function sendBroadcast() {
+      var msg = $('#message').val();
+      $('#message').val("");
+      s.emit("C_to_S_broadcast", { value : msg });
+    }
+
+    /*-- jqueryでメッセージを追加 --*/
+    function addMessage( value, color, size) {
+      // タグ記号といくつか削除
+      var msg = value.replace( /[!@$%&lt;&gt;'"&amp;|]/g, '' );
+      $("#msg_list").prepend("<div class='msg'>" + msg + "</div>");
+    }
+    </script>
+
+    <style>
+    *{
+      font-size:30px;
+      margin:0;
+      padding:0;
+    }
+    </style>
+  </head>
+
+  <body>
+    <div id="msg_list" style="height:300px; overflow: auto;"></div>
+    <form action="" method="post" onsubmit="return false;">
+      <input type="text" class="text" style="width: 95%; padding: 10px" id="message" />
+      <input type="submit" class="button" style="padding: 10px" onclick="sendMessage();" value="みんな" />
+      <input type="submit" class="button" style="padding: 10px" onclick="sendBroadcast();" value="自分以外" />
+    </div>
+  </body>
+</html>
